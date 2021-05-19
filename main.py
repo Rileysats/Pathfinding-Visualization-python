@@ -1,7 +1,7 @@
-
 import tkinter as tk
 from tkinter.constants import END
 import pygame
+import astar
 
 # GLOBAL VARIABLES
 BLACK = (0, 0, 0)
@@ -40,7 +40,7 @@ def make_grid() -> None:
   for row in range(ROW):
       GRID.append([])
       for column in range(COLUMN):
-          GRID[row].append(0) 
+          GRID[row].append(float('inf')) 
 
 # TKINTER POPUP
 def set_algo(num,path,btn_list,algos) -> None:
@@ -103,16 +103,28 @@ def update_grid(screen) -> None:
   for row in range(len(GRID)):
     for column in range(len(GRID[0])): 
       color = None
-      if GRID[row][column] == 1: #BARRIER
+      if GRID[row][column] == -1: #BARRIER
         color = GREY
-      if GRID[row][column] == 2: #START
+      if GRID[row][column] == -2: #START
         color = RED
-      if GRID[row][column] == 3: #END
+      if GRID[row][column] == -3: #END
         color = BLACK
       if color:
         pygame.draw.rect(screen,color,
                               [(WIDTH_OF_SQUARE) * column,
                                 ( HEIGHT_OF_SQUARE) * row +30, WIDTH_OF_SQUARE, HEIGHT_OF_SQUARE])
+
+def draw_on_grid(screen,row,column) -> None:
+  if not path.start:
+    path.set_start((row,column))
+    GRID[row][column] = -2
+  elif not path.end and (row,column) != path.start:
+    path.set_end((row,column))
+    GRID[row][column] = -3
+  elif (row == path.start[0] and column == path.start[1]) or (row == path.end[0] and column == path.end[1]):
+    return
+  else:
+    GRID[row][column] = -1
 
 # PYGAME SETUP
 def main(path) -> None:
@@ -136,17 +148,7 @@ def main(path) -> None:
       if event.type == pygame.QUIT:
         done = True
       elif pygame.mouse.get_pressed()[0] and position[1] > 33 and row < ROW and column < COLUMN and stop_drawing == False:
-        if not path.start:
-          path.set_start((row,column))
-          GRID[row][column] = 2
-          continue
-        elif not path.end and (row,column) != path.start:
-          path.set_end((row,column))
-          GRID[row][column] = 3
-          continue
-        elif (row == path.start[0] and column == path.start[1]) or (row == path.end[0] and column == path.end[1]):
-          continue
-        GRID[row][column] = 1
+        draw_on_grid(screen,row,column)
 
       elif event.type == pygame.MOUSEBUTTONDOWN and 0 < position[1] < 33 and (WINDOW_SIZE[0]//2)-35 < position[0] < (WINDOW_SIZE[0]//2)+35 and game_text == "start":    
         game_text = "stop"
