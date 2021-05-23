@@ -1,5 +1,11 @@
 # start, end === (row,column)
 import math
+import tkinter as tk
+from tkinter import *
+from tkinter import messagebox
+import os
+import pygame
+
 GREEN = (0, 255, 0)
 BLUE = (255, 0 ,0)
 WIDTH_OF_SQUARE = 15
@@ -21,12 +27,30 @@ def astar(screen,grid,start,end):
       
       temp = current.F
       for i in range(round(current.F)):
-        pass
+        current.closed = False
+        current = current.previous
+      
+      Tk().wm_withdraw()
+      result = messagebox.askokcancel('Program Finished', ('The program finished, the shortest distance \n to the path is ' + str(temp) + ' blocks away, \n would you like to re run the program?'))
+      if result == True:
+        os.execl(sys.executable,sys.executable, *sys.argv)
+      else:
+        ag = True
+        while ag:
+          ev = pygame.event.get()
+          for event in ev:
+            if event.type == pygame.KEYDOWN:
+              ag = False
+              break
+        pygame.quit()
+      
     
     open.pop(lowestIndex)
     close.append(current)
 
     neighbours = current.neighbours
+    # for i in neighbours:
+    #   print(i.wall)
     for i in range(len(neighbours)):
       neighbour = neighbours[i]
       if neighbour not in close:

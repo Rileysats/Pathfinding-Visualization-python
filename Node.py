@@ -17,15 +17,9 @@ class Node:
     self.previous = None
 
   def set_color(self,screen,color) -> None:
-    if self.closed == False and self.wall == False:
+    if self.closed == False and self.color != (0,0,0):
       pygame.draw.rect(screen, color, (self.column * WIDTH_OF_SQUARE, self.row * HEIGHT_OF_SQUARE + 30, WIDTH_OF_SQUARE, HEIGHT_OF_SQUARE))
       pygame.display.update()
-    # if self.closed == True:
-    #   pygame.draw.rect(screen, (0,255,0), (self.column * WIDTH_OF_SQUARE, self.row * HEIGHT_OF_SQUARE, WIDTH_OF_SQUARE, HEIGHT_OF_SQUARE))
-    #   pygame.display.update()
-    # else:
-    #   pygame.draw.rect(screen, (0,0,255), (self.column * WIDTH_OF_SQUARE, self.row * HEIGHT_OF_SQUARE + 30, WIDTH_OF_SQUARE, HEIGHT_OF_SQUARE))
-    #   pygame.display.update()
 
   
   def get_neighbours(self,grid) -> None:
@@ -36,6 +30,7 @@ class Node:
     
     if j < cols-1 and grid[j+1][i].wall == False:
       self.neighbours.append(grid[j+1][i])
+      print(grid[j+1][i].wall)
     if j > 0 and grid[j-1][i].wall == False:
       self.neighbours.append(grid[j-1][i])
     if i < rows-1 and grid[j][i+1].wall == False:

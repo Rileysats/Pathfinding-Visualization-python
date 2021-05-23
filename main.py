@@ -104,15 +104,6 @@ def draw_lines(screen) -> None:
 def update_grid(screen) -> None:
   for row in range(len(grid)):
     for column in range(len(grid[0])): 
-      # color = None
-      # if grid[row][column].color == -1: #BARRIER
-      #   color = GREY
-      # if grid[row][column].color == -2: #START
-      #   color = RED
-      # if grid[row][column].color == -3: #END
-      #   color = BLACK
-      # if grid[row][column].color == -4: #PATH
-      #   color = GREEN
       if grid[row][column].color:
         pygame.draw.rect(screen,grid[row][column].color,
                               [(WIDTH_OF_SQUARE) * column,
@@ -165,20 +156,12 @@ def main() -> None:
         stop_drawing = True
       elif event.type == pygame.MOUSEBUTTONDOWN and 0 < position[1] < 33 and (WINDOW_SIZE[0]//2)-35 < position[0] < (WINDOW_SIZE[0]//2)+35 and game_text == "stop":
         game_text = "start"
+
         started = False
-      # elif started:
-      #   if ALGO == "Dijkstra's algorithm":
-      #     pass
-      #   elif ALGO == "A* algorithm":
-      #     # path.grid = astar.astar(screen,path,path.grid,path.start,path.end)
-          
-      #     done = False
-      #     break
-      #   elif ALGO ==  "Sample algorithm":
-      #     pass
  
     update_grid(screen)
     if started and not finished:
+      set_neighbours(grid)
       if ALGO == "Dijkstra's algorithm":
         pass
       if ALGO == "A* algorithm":
@@ -203,7 +186,7 @@ def main() -> None:
 
 if __name__ == "__main__":
   make_grid()
-  set_neighbours(grid)
+  # set_neighbours(grid)
   algo_select()
   tell_user()
   main()
