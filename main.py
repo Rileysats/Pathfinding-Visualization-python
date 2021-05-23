@@ -131,6 +131,8 @@ def draw_on_grid(screen,row,column) -> None:
     return
   else:
     grid[row][column].color = (130,130,130)
+    grid[row][column].wall = True
+
 
 # PYGAME SETUP
 def main() -> None:
@@ -192,7 +194,7 @@ def main() -> None:
     text = font.render(game_text,1,(0,0,0))
     screen.blit(text,((WINDOW_SIZE[0]//2)-32,-7))
  
-    clock.tick(60)
+    clock.tick(1000)
     pygame.display.flip()
 
   
